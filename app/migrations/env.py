@@ -14,16 +14,16 @@ from database import Base
 # access to the values within the .ini file in use.
 config = context.config
 
-user_name = "root"
-password = "Riku@0369"
-host = "yanorikuunoMacBook-puro.local"
-database_name = "media_fastapi"
+# user_name = "root"
+# password = "Riku@0369"
+# host = "yanorikuunoMacBook-puro.local"
+# database_name = "media_fastapi"
 
 # connect to database
-DB_USER = "root"
-DB_PASSWORD = "Riku@0369"
+DB_USER = "sumomo"
+DB_PASSWORD = "riku0369"
 DB_ROOT_PASSWORD = "Riku@0369"
-DB_HOST = "yanorikuunoMacBook-puro.local"
+DB_HOST = "database-1.cnjzw96avif2.ap-northeast-1.rds.amazonaws.com"
 DB_NAME = "media_fastapi"
 
 DATABASE = 'mysql://%s:%s@%s/%s?charset=utf8' % (
