@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option go_package = "pb";
+
+// import "entity_common.proto";
+import "entity_article.proto";
+
+package api;
+
+service ArticleService {
+    // rpc GetAllByIDs (entity.ArticleIDList) returns (entity.ArticleList);
+    rpc Get (entity.ArticleID) returns (entity.Article);
+    rpc GetAll (entity.Pager) returns (entity.ArticleList);
+    rpc Create (entity.CreateArticleRequest) returns (entity.Article);
+    rpc Update (entity.UpdateArticleRequest) returns (entity.Article);
+    rpc Delete (entity.ArticleID) returns (entity.Empty);
+}

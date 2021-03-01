@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option go_package = "pb";
+
+package entity;
+
+message AdminUser {
+    string id = 1;
+    string name = 2;
+    string email = 3;
+}
+
+message AdminUserID {
+    string id = 1;
+}
+
+message CreateAdminUserRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message UpdateAdminUserRequest {
+    string id = 1;
+    string name = 2;
+}
+
+message AccessToken {
+    string token = 1;
+}
+
+message AdminUserList {
+    repeated AdminUser items = 1;
+}
+
