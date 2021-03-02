@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 
 user_name = "sumomo"
 password = "riku0369"
-host = "database-1.cnjzw96avif2.ap-northeast-1.rds.amazonaws.com"
+host = "database-1.cnjzw96avif2.ap-northeast-1.rds.amazonaws.com:3306"
 database_name = "media_fastapi"
 
 SQLALCHEMY_DATABASE_URL = f'mysql://{user_name}:{password}@{host}/{database_name}'

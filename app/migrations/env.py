@@ -23,7 +23,7 @@ config = context.config
 DB_USER = "sumomo"
 DB_PASSWORD = "riku0369"
 DB_ROOT_PASSWORD = "Riku@0369"
-DB_HOST = "database-1.cnjzw96avif2.ap-northeast-1.rds.amazonaws.com"
+DB_HOST = "database-1.cnjzw96avif2.ap-northeast-1.rds.amazonaws.com:3306"
 DB_NAME = "media_fastapi"
 
 DATABASE = 'mysql://%s:%s@%s/%s?charset=utf8' % (
