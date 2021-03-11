@@ -1,4 +1,9 @@
 path
-__pycache__/
+__pycache__
+app/__pycache__
+app/migrations/__pycache__
+app/migrations/versions/__pycache__
+pb/__pycache__
+*/__pycache__
 *.py[cod]
 *$py.class
