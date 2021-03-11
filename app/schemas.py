@@ -7,22 +7,24 @@ class ArticleBase(BaseModel):
    title: str
    description: Optional[str] = None
 
+class ArticleGet(BaseModel):
+   id: str
 
 class ArticleCreate(ArticleBase):
-   pass
+   userID: str
 
 
 class ArticleUpdate(ArticleBase):
-   pass
+   id: str
 
 
-class ArticleDelete(ArticleBase):
-   id: int
+class ArticleDelete(BaseModel):
+   id: str
 
 
 class Article(ArticleBase):
-   id: int
-   owner_id: int
+   id: str
+   userID: str
 
    class Config:
       orm_mode = True
@@ -33,16 +35,20 @@ class UserBase(BaseModel):
    name: str
 
 
+class UserGet(BaseModel):
+   id: str
+
 class UserCreate(UserBase):
    password: str
 
 
-class UserUpdate(UserBase):
-   pass
+class UserUpdate(BaseModel):
+   id: str
+   name: str
 
 
-class UserDelete(UserBase):
-   id: int
+class UserDelete(BaseModel):
+   id: str
 
 
 class User(UserBase):

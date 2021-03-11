@@ -33,7 +33,7 @@ def update_user(db: Session, item: schemas.UserUpdate):
     return db_user
 
 
-def delete_user(db: Session, item: schemas.ArticleDelete):
+def delete_user(db: Session, item: schemas.UserDelete):
     db.query(models.User).filter(models.User.id == int(item.id)).delete()
     db.commit()
     return
