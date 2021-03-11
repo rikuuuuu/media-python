@@ -6,6 +6,9 @@ from sqlalchemy import pool
 from alembic import context
 
 import os
+from os import getenv
+from dotenv import load_dotenv
+load_dotenv()
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from database import Base
@@ -14,17 +17,12 @@ from database import Base
 # access to the values within the .ini file in use.
 config = context.config
 
-# user_name = "root"
-# password = "Riku@0369"
-# host = "yanorikuunoMacBook-puro.local"
-# database_name = "media_fastapi"
-
 # connect to database
-DB_USER = "sumomo"
-DB_PASSWORD = "riku0369"
-DB_ROOT_PASSWORD = "Riku@0369"
-DB_HOST = "database-1.cnjzw96avif2.ap-northeast-1.rds.amazonaws.com:3306"
-DB_NAME = "media_fastapi"
+DB_USER = getenv('DB_USER')
+DB_PASSWORD = getenv('DB_PASSWORD')
+DB_ROOT_PASSWORD = getenv('DB_ROOT_PASSWORD')
+DB_HOST = getenv('DB_HOST')
+DB_NAME = getenv('DB_NAME')
 
 DATABASE = 'mysql://%s:%s@%s/%s?charset=utf8' % (
     DB_USER,
