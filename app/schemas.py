@@ -25,14 +25,15 @@ class ArticleDelete(BaseModel):
 class Article(ArticleBase):
    id: str
    userID: str
-
+   createdAt: str
+   updatedAt: str
+   userID: str
    class Config:
       orm_mode = True
 
 
 class UserBase(BaseModel):
    email: str
-   name: str
 
 
 class UserGet(BaseModel):
@@ -53,6 +54,7 @@ class UserDelete(BaseModel):
 
 class User(UserBase):
    id: int
+   name: str
    is_active: bool
    articles: List[Article] = []
 
