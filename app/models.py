@@ -14,6 +14,7 @@ class User(Base):
     name = Column(String(50), unique=True, index=True)
     hashed_password = Column(String(50))
     is_active = Column(Boolean, default=True)
+    refresh_token = Column(String(500), nullable=True)
     articles = relationship("Article", back_populates="owner")
     
 

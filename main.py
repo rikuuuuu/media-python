@@ -1,3 +1,5 @@
+from fastapi.security.oauth2 import OAuth2PasswordRequestForm
+from app.auth import authenticate, create_tokens, get_current_user, get_current_user_with_refresh_token
 from typing import List
 from fastapi import FastAPI
 # HTTPException
@@ -6,6 +8,8 @@ from pydantic.schema import schema
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import true
 from app.database import SessionLocal, engine
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordBearer
 
 from app import user_crud, article_crud, schemas, models
 
@@ -20,6 +24,24 @@ logger.addHandler(handler)
 logger.propagate = False
 
 app = FastAPI()
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+origins = [
+    "http://localhost.tiangolo.com",
+    "https://localhost.tiangolo.com",
+    "http://localhost",
+    "http://localhost:8080",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def get_db():
    db = SessionLocal()
@@ -52,6 +74,28 @@ def ToResUser(db_user):
 @app.get("/")
 def index():
     return 'Hello World!'
+
+@app.get("/items/")
+async def read_items(token: str = Depends(oauth2_scheme)):
+    return {"token": token}
+
+@app.post("/token")
+async def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    # """トークン発行"""
+    user = authenticate(db=db, username=form.username, password=form.password)
+    return create_tokens(db=db, user_id=user.id)
+
+
+@app.get("/refresh_token/")
+async def refresh_token(current_user: models.User = Depends(get_current_user_with_refresh_token)):
+    # """リフレッシュトークンでトークンを再取得"""
+    return create_tokens(current_user.id)
+
+
+@app.get("/users/me/")
+async def read_users_me(current_user: models.User = Depends(get_current_user)):
+    # """ログイン中のユーザーを取得"""
+    return current_user
 
 # User Service
 @app.post("/user/create")
@@ -87,12 +131,13 @@ def delete_user(user: schemas.UserDelete, db: Session = Depends(get_db)):
 
 
 # Article Service
-@app.get("/article/get")
-def get_article(article: schemas.ArticleGet, db: Session = Depends(get_db)):
-    db_article = article_crud.get_article(db, article_id=int(article.id))
+@app.get("/article/{article_id}")
+def get_article(article_id: int, db: Session = Depends(get_db)):
+    # logger.debug("article ", article)
+    db_article = article_crud.get_article(db, article_id=article_id)
     return ToResArticle(db_article)
 
-@app.get("/article/all")
+@app.post("/article/all")
 def GetArticleAll(db: Session = Depends(get_db)):
     db_articles = article_crud.get_articles(db)
     articleList = []
