@@ -67,7 +67,7 @@ def ToResUser(db_user):
         id=db_user.id,
         email=db_user.email,
         name=db_user.name,
-        is_active=db_user.is_active
+        is_active=db_user.is_active,
     )
 
 
