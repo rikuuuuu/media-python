@@ -1,8 +1,7 @@
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from app.auth import authenticate, create_tokens, get_current_user, get_current_user_with_refresh_token
 from typing import List
-from fastapi import FastAPI
-# HTTPException
+from fastapi import FastAPI, HTTPException
 from fastapi.params import Depends
 from pydantic.schema import schema
 from sqlalchemy.orm import Session
@@ -75,58 +74,49 @@ def ToResUser(db_user):
 def index():
     return 'Hello World!'
 
-@app.get("/items/")
-async def read_items(token: str = Depends(oauth2_scheme)):
-    return {"token": token}
+# User Service
+@app.get("/user/getme")
+async def get_userme(current_user: models.User = Depends(get_current_user)):
+    return current_user
 
 @app.post("/token")
-async def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    # """トークン発行"""
+async def user_login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = authenticate(db=db, username=form.username, password=form.password)
     return create_tokens(db=db, user_id=user.id)
 
-
-@app.get("/refresh_token/")
-async def refresh_token(current_user: models.User = Depends(get_current_user_with_refresh_token)):
-    # """リフレッシュトークンでトークンを再取得"""
+@app.get("/refresh_token")
+async def user_refresh_token(current_user: models.User = Depends(get_current_user_with_refresh_token)):
     return create_tokens(current_user.id)
 
-
-@app.get("/users/me/")
-async def read_users_me(current_user: models.User = Depends(get_current_user)):
-    # """ログイン中のユーザーを取得"""
-    return current_user
-
-# User Service
 @app.post("/user/create")
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    # db_user = user_crud.get_user_by_email(db, email=user.email)
-    # if db_user:
-    #     raise HTTPException(status_code=400, detail="Email already registered")
+    db_user = user_crud.get_user_by_email(db, email=user.email)
+    if db_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
     db_user = user_crud.create_user(db=db, user=user)
     return ToResUser(db_user)
 
-@app.get("/user/get")
-def read_user(user: schemas.UserGet, db: Session = Depends(get_db)):
-    db_user = user_crud.get_user(db, user_id=int(user.id))
-    # if db_user is None:
-    #     raise HTTPException(status_code=404, detail="User not found")
-    return ToResUser(db_user)
+# @app.get("/user/get")
+# def read_user(user: schemas.UserGet, db: Session = Depends(get_db)):
+#     db_user = user_crud.get_user(db, user_id=int(user.id))
+#     if db_user is None:
+#         raise HTTPException(status_code=404, detail="User not found")
+#     return ToResUser(db_user)
 
 @app.post("/user/update")
-def update_user(user: schemas.UserUpdate, db: Session = Depends(get_db)):
-    # db_user = user_crud.get_user(db, user_id=int(user.id))
-    # if db_user is None:
-    #     raise HTTPException(status_code=404, detail="User not found")
-    db_user = user_crud.update_user(db, item=user)
+def update_user(user: schemas.UserUpdate, current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
+    db_user = user_crud.get_user(db, user_id=int(current_user.id))
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    db_user = user_crud.update_user(db, user=user, user_id=current_user.id)
     return ToResUser(db_user)
 
 @app.post("/user/delete")
 def delete_user(user: schemas.UserDelete, db: Session = Depends(get_db)):
-    # db_user = user_crud.get_user(db, user_id=int(user.id))
-    # if db_user is None:
-    #     raise HTTPException(status_code=404, detail="User not found")
-    user_crud.delete_user(db, item=user)
+    db_user = user_crud.get_user(db, user_id=int(user.id))
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    user_crud.delete_user(db, user=user)
     return
 
 
@@ -138,7 +128,7 @@ def get_article(article_id: int, db: Session = Depends(get_db)):
     return ToResArticle(db_article)
 
 @app.post("/article/all")
-def GetArticleAll(db: Session = Depends(get_db)):
+def get_article_all(db: Session = Depends(get_db)):
     db_articles = article_crud.get_articles(db)
     articleList = []
 
@@ -149,16 +139,16 @@ def GetArticleAll(db: Session = Depends(get_db)):
     return articleList
 
 @app.post("/article/create")
-def create_article(article: schemas.ArticleCreate, db: Session = Depends(get_db)):
-    db_article = article_crud.create_article(db=db, item=article)
+def create_article(article: schemas.ArticleCreate, current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
+    db_article = article_crud.create_article(db=db, article=article, userID=int(current_user.id))
     return ToResArticle(db_article)
 
 @app.post("/article/update")
-def update_article(article: schemas.ArticleUpdate, db: Session = Depends(get_db)):
+def update_article(article: schemas.ArticleUpdate, current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
     db_article = article_crud.update_article(db=db, item=article)
     return ToResArticle(db_article)
 
 @app.post("/article/delete")
-def delete_article(article: schemas.ArticleDelete, db: Session = Depends(get_db)):
+def delete_article(article: schemas.ArticleDelete, current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
     article_crud.delete_article(db=db, item=article)
     return

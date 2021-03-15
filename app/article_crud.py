@@ -14,25 +14,25 @@ def get_articles(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Article).offset(skip).limit(limit).all()
 
 
-def create_article(db: Session, item: schemas.ArticleCreate):
-    db_item = models.Article(title=item.title, description=item.description, owner_id=item.userID)
+def create_article(db: Session, article: schemas.ArticleCreate, userID: int):
+    db_item = models.Article(title=article.title, description=article.description, owner_id=userID)
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
     return db_item
 
 
-def update_article(db: Session, item: schemas.ArticleUpdate):
-    article = db.query(models.Article).filter(models.Article.id == int(item.id)).first()
-    article.title = item.title
-    article.description = item.description
+def update_article(db: Session, article: schemas.ArticleUpdate):
+    article = db.query(models.Article).filter(models.Article.id == int(article.id)).first()
+    article.title = article.title
+    article.description = article.description
     # article.updated_at = datetime.now
     db.commit()
     db.refresh(article)
     return article
 
 
-def delete_article(db: Session, item: schemas.ArticleDelete):
-    db.query(models.Article).filter(models.Article.id == int(item.id)).delete()
+def delete_article(db: Session, article: schemas.ArticleDelete):
+    db.query(models.Article).filter(models.Article.id == int(article.id)).delete()
     db.commit()
     return

@@ -11,8 +11,7 @@ class ArticleGet(BaseModel):
    id: str
 
 class ArticleCreate(ArticleBase):
-   userID: str
-
+   pass
 
 class ArticleUpdate(ArticleBase):
    id: str
@@ -44,7 +43,6 @@ class UserCreate(UserBase):
 
 
 class UserUpdate(BaseModel):
-   id: str
    name: str
 
 

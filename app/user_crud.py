@@ -25,15 +25,15 @@ def create_user(db: Session, user: schemas.UserCreate):
     return db_user
 
 
-def update_user(db: Session, item: schemas.UserUpdate):
-    db_user = db.query(models.User).filter(models.User.id == int(item.id)).first()
-    db_user.name = item.name
+def update_user(db: Session, user: schemas.UserUpdate, user_id: int):
+    db_user = db.query(models.User).filter(models.User.id == int(user_id)).first()
+    db_user.name = user.name
     db.commit()
     db.refresh(db_user)
     return db_user
 
 
-def delete_user(db: Session, item: schemas.UserDelete):
-    db.query(models.User).filter(models.User.id == int(item.id)).delete()
+def delete_user(db: Session, user: schemas.UserDelete):
+    db.query(models.User).filter(models.User.id == int(user.id)).delete()
     db.commit()
     return
