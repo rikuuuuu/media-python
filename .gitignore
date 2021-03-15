@@ -1,7 +1,6 @@
 __pycache__
 app/__pycache__
 app/migrations/__pycache__
-app/migrations/versions/__pycache__
 app/migrations/versions
 pb/__pycache__
 */__pycache__
