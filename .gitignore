@@ -8,5 +8,8 @@ pb/__pycache__
 *$py.class
 
 path
+pb
+proto
+server.py
 .env
 # app/migrations/versions

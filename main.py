@@ -93,15 +93,10 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = user_crud.get_user_by_email(db, email=user.email)
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
+    if len(user.password) < 8:
+        raise HTTPException(status_code=400, detail="Password is too short")
     db_user = user_crud.create_user(db=db, user=user)
     return ToResUser(db_user)
-
-# @app.get("/user/get")
-# def read_user(user: schemas.UserGet, db: Session = Depends(get_db)):
-#     db_user = user_crud.get_user(db, user_id=int(user.id))
-#     if db_user is None:
-#         raise HTTPException(status_code=404, detail="User not found")
-#     return ToResUser(db_user)
 
 @app.post("/user/update")
 def update_user(user: schemas.UserUpdate, current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
@@ -112,12 +107,13 @@ def update_user(user: schemas.UserUpdate, current_user: models.User = Depends(ge
     return ToResUser(db_user)
 
 @app.post("/user/delete")
-def delete_user(user: schemas.UserDelete, db: Session = Depends(get_db)):
-    db_user = user_crud.get_user(db, user_id=int(user.id))
+def delete_user(current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
+    db_user = user_crud.get_user(db, user_id=int(current_user.id))
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
-    user_crud.delete_user(db, user=user)
+    user_crud.delete_user(db, user=current_user)
     return
+
 
 
 # Article Service
@@ -145,10 +141,10 @@ def create_article(article: schemas.ArticleCreate, current_user: models.User = D
 
 @app.post("/article/update")
 def update_article(article: schemas.ArticleUpdate, current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
-    db_article = article_crud.update_article(db=db, item=article)
+    db_article = article_crud.update_article(db=db, article=article)
     return ToResArticle(db_article)
 
 @app.post("/article/delete")
 def delete_article(article: schemas.ArticleDelete, current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
-    article_crud.delete_article(db=db, item=article)
+    article_crud.delete_article(db=db, article=article)
     return
