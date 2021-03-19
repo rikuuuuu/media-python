@@ -24,6 +24,7 @@ class Article(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(30), index=True)
     description = Column(String(1000), index=True)
+    thumbnailURL = Column(String(100), index=True, nullable=True, unique=False)
     created_at = Column(DateTime, default=datetime.now(), server_default=current_timestamp())
     updated_at = Column(DateTime, default=datetime.now(), server_onupdate=current_timestamp())
     owner_id = Column(Integer, ForeignKey("user.id"))

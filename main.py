@@ -1,7 +1,7 @@
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from app.auth import authenticate, create_tokens, get_current_user, get_current_user_with_refresh_token
 from typing import List
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, File, UploadFile
 from fastapi.params import Depends
 from pydantic.schema import schema
 from sqlalchemy.orm import Session
@@ -55,6 +55,7 @@ def ToResArticle(db_article):
         id=str(db_article.id),
         title=db_article.title,
         description=db_article.description,
+        thumbnailURL=db_article.thumbnailURL,
         userID=str(db_article.owner_id),
         createdAt=str(db_article.created_at),
         updatedAt=str(db_article.updated_at)
@@ -148,3 +149,9 @@ def update_article(article: schemas.ArticleUpdate, current_user: models.User = D
 def delete_article(article: schemas.ArticleDelete, current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
     article_crud.delete_article(db=db, article=article)
     return
+
+# Image Upload to S3
+@app.post("/image/upload")
+def image_upload(file: UploadFile = File(...), current_user: models.User = Depends(get_current_user)):
+    url = article_crud.image_upload(file=file)
+    return url

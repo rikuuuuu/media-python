@@ -1,11 +1,11 @@
 from typing import List, Optional
-
 from pydantic import BaseModel
 
 
 class ArticleBase(BaseModel):
    title: str
    description: Optional[str] = None
+   thumbnailURL: str
 
 class ArticleGet(BaseModel):
    id: str
@@ -20,13 +20,11 @@ class ArticleUpdate(ArticleBase):
 class ArticleDelete(BaseModel):
    id: str
 
-
 class Article(ArticleBase):
    id: str
    userID: str
    createdAt: str
    updatedAt: str
-   userID: str
    class Config:
       orm_mode = True
 
