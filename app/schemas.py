@@ -1,57 +1,65 @@
 from typing import List, Optional
+
 from pydantic import BaseModel
 
+
 class ArticleBase(BaseModel):
-   title: str
-   description: Optional[str] = None
-   thumbnailURL: str
+    title: str
+    description: Optional[str] = None
+    thumbnailURL: str
+
 
 class ArticleGet(BaseModel):
-   id: str
+    id: str
+
 
 class ArticleCreate(ArticleBase):
-   pass
+    pass
+
 
 class ArticleUpdate(ArticleBase):
-   id: str
+    id: str
 
 
 class ArticleDelete(BaseModel):
-   id: str
+    id: str
+
 
 class Article(ArticleBase):
-   id: str
-   userID: str
-   createdAt: str
-   updatedAt: str
-   class Config:
-      orm_mode = True
+    id: str
+    userID: str
+    createdAt: str
+    updatedAt: str
+
+    class Config:
+        orm_mode = True
 
 
 class UserBase(BaseModel):
-   email: str
+    email: str
 
 
 class UserGet(BaseModel):
-   id: str
+    id: str
+
 
 class UserCreate(UserBase):
-   password: str
+    password: str
 
 
 class UserUpdate(BaseModel):
-   name: str
+    name: str
 
 
 class UserDelete(BaseModel):
-   id: str
+    id: str
 
 
 class User(UserBase):
-   id: int
-   name: str
-   is_active: bool
-   articles: List[Article] = []
+    id: int
+    name: str
+    is_active: bool
+    articles: List[Article] = []
 
-   class Config:
-      orm_mode = True
+    class Config:
+        orm_mode = True

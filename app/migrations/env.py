@@ -1,16 +1,15 @@
+import os
 from logging.config import fileConfig
-
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+from os import getenv
 
 from alembic import context
-
-import os
-from os import getenv
 from dotenv import load_dotenv
+from sqlalchemy import engine_from_config, pool
+
 load_dotenv()
 import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from database import Base
 
 # this is the Alembic Config object, which provides
@@ -18,19 +17,19 @@ from database import Base
 config = context.config
 
 # connect to database
-DB_USER = getenv('DB_USER')
-DB_PASSWORD = getenv('DB_PASSWORD')
-DB_ROOT_PASSWORD = getenv('DB_ROOT_PASSWORD')
-DB_HOST = getenv('DB_HOST')
-DB_NAME = getenv('DB_NAME')
+DB_USER = getenv("DB_USER")
+DB_PASSWORD = getenv("DB_PASSWORD")
+DB_ROOT_PASSWORD = getenv("DB_ROOT_PASSWORD")
+DB_HOST = getenv("DB_HOST")
+DB_NAME = getenv("DB_NAME")
 
-DATABASE = 'mysql://%s:%s@%s/%s?charset=utf8' % (
+DATABASE = "mysql://%s:%s@%s/%s?charset=utf8" % (
     DB_USER,
     DB_PASSWORD,
     DB_HOST,
     DB_NAME,
 )
-config.set_main_option('sqlalchemy.url', DATABASE)
+config.set_main_option("sqlalchemy.url", DATABASE)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -88,9 +87,7 @@ def run_migrations_online():
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

@@ -7,3 +7,11 @@ gen_server:
 
 migrate:
 	scripts/migrate.sh
+
+PHONY: lint
+lint:
+	@poetry run pre-commit run --all-files
+
+PHONY: run_local
+run_local:
+	@poetry run uvicorn main:app --reload

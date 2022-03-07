@@ -12,4 +12,6 @@ pb
 proto
 server.py
 .env
+.venv
+.python-version
 # app/migrations/versions

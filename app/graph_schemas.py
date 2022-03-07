@@ -1,13 +1,12 @@
 import graphene
-from graphene_pydantic import PydanticInputObjectType, PydanticObjectType
+
 from . import models
-from . import schemas
 
 # class UserGrapheneInputModel(PydanticInputObjectType):
 #     class Meta:
 #         model = schemas.UserBase
-        # exclude_fields = ('id', 'posts', 'comments')
-            
+# exclude_fields = ('id', 'posts', 'comments')
+
 # class UserGrapheneModel(PydanticObjectType):
 #     class Meta:
 #         model = schemas.UserBase
@@ -30,7 +29,12 @@ class CreateUser(graphene.Mutation):
     def mutate(parent, info, db, user):
         # user = User()
         fake_hashed_password = user.password + "notreallyhashed"
-        db_user = models.User(email=user.email, hashed_password=fake_hashed_password, name="", refresh_token="")
+        db_user = models.User(
+            email=user.email,
+            hashed_password=fake_hashed_password,
+            name="",
+            refresh_token="",
+        )
         # user.email = user_details.name
         # user.address = user_details.address
         # user.phone_number = user_details.phone_number
@@ -39,7 +43,7 @@ class CreateUser(graphene.Mutation):
         db.add(db_user)
         db.commit()
         db.refresh(db_user)
-        
+
         return db_user
 
 
