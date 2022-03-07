@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "media-python"
+version = "0.1.0"
+description = ""
+authors = ["rikuuuuu <silk.riku0369@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+mysql = "^0.0.3"
+mysqlclient = "^2.1.0"
+SQLAlchemy = "^1.4.32"
+alembic = "^1.7.6"
+awscli = "^1.22.68"
+bcrypt = "^3.2.0"
+boto3 = "^1.21.13"
+python-multipart = "^0.0.5"
+jose = "^1.0.0"
+jsonschema = "^4.4.0"
+python-jose = "^3.3.0"
+python-dotenv = "^0.19.2"
+graphene = "^3.0"
+graphene-pydantic = "^0.3.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

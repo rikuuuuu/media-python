@@ -9,8 +9,12 @@ from sqlalchemy.sql.expression import true
 from app.database import SessionLocal, engine
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
+from app.graph_schemas import Query, Mutation
 
 from app import user_crud, article_crud, schemas, models
+
+import graphene
+from starlette.graphql import GraphQLApp
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -43,12 +47,12 @@ app.add_middleware(
 )
 
 def get_db():
-   db = SessionLocal()
-   try:
-       yield db
-   finally:
-       db.close()
-
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+        
 # Article データベース型 → レスポンス型　変換
 def ToResArticle(db_article):
     return schemas.Article(
@@ -71,9 +75,17 @@ def ToResUser(db_user):
     )
 
 
-@app.get("/")
-def index():
-    return 'Hello World!'
+# class Query(graphene.ObjectType):
+#     hello = graphene.String(name=graphene.String(default_value="stranger"))
+
+#     def resolve_hello(self, info, name):
+#         return "Hello " + name
+
+app.add_route('/graphql', GraphQLApp(schema=graphene.Schema(query=Query, mutation=Mutation)))
+
+@app.get('/')
+def ping():
+    return {'ping': 'pong'}
 
 # User Service
 @app.get("/user/getme")

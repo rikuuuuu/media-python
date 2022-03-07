@@ -1,0 +1,57 @@
+version: "3.3"
+
+services:
+  # MySQL
+  db:
+    container_name: "db"
+    # path配下のDockerfile読み込み
+    build: ./docker/mysql
+    # コンテナが落ちたら再起動する
+    # restart: always
+    tty: true
+    environment:
+      MYSQL_DATABASE: media_dev
+      # MYSQL_USER: root
+      # DB_HOST: db
+      # MYSQL_PASSWORD: Riku@0369
+      MYSQL_ROOT_PASSWORD: Riku@0369
+    ports:
+      - "3316:3306"
+    volumes:
+      - ./docker/mysql/db:/docker-entrypoint-initdb.d # 定義どおりにテーブル作成
+      - ./docker/mysql/my.cnf:/etc/mysql/cnf.d # MySQLの基本設定(文字化け対策)
+      # - ./log/mysql:/var/log/mysql # ログの保存
+    networks:
+      - local-net
+
+  # FastAPI
+  api:
+    # db起動後に立ち上げる
+    links:
+      - db
+    container_name: "api"
+    # path配下のDockerfile読み込み
+    build: .
+    ports:
+      - "9000:9000"
+    # volumes:
+    #   - ./code:/usr/src/server
+    networks:
+      - local-net
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - '80:80'
+      #socketファイルの共有
+    # volumes: 
+    #   - sockets:/app/tmp/sockets
+    depends_on: 
+      - api
+
+# コンテナ間で通信を行うためのネットワークブリッジ
+networks:
+  local-net:
+    driver: bridge

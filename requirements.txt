@@ -1,0 +1,15 @@
+mysql
+mysqlclient
+sqlalchemy
+alembic
+awscli
+bcrypt
+boto3
+python-multipart
+jose
+jsonschema
+python-jose
+python-dotenv
+graphene
+graphene-pydantic
+graphene_sqlalchemy

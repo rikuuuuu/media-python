@@ -1,7 +1,6 @@
 from typing import List, Optional
 from pydantic import BaseModel
 
-
 class ArticleBase(BaseModel):
    title: str
    description: Optional[str] = None
@@ -55,4 +54,4 @@ class User(UserBase):
    articles: List[Article] = []
 
    class Config:
-       orm_mode = True
+      orm_mode = True
