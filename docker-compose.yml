@@ -46,9 +46,9 @@ services:
     ports:
       - '80:80'
       #socketファイルの共有
-    # volumes: 
+    # volumes:
     #   - sockets:/app/tmp/sockets
-    depends_on: 
+    depends_on:
       - api
 
 # コンテナ間で通信を行うためのネットワークブリッジ
