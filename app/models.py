@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql.functions import current_timestamp
 from sqlalchemy.sql.sqltypes import DateTime
 
-from .database import Base
+from .database import Base, engine
 
 
 class User(Base):
@@ -35,3 +35,6 @@ class Article(Base):
     )
     owner_id = Column(Integer, ForeignKey("user.id"))
     owner = relationship("User", back_populates="articles")
+
+
+Base.metadata.create_all(engine)

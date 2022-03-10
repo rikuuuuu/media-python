@@ -1,12 +1,12 @@
-MAKEFLAGS=--no-builtin-rules --no-builtin-variables --always-make
-ROOT := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
-export PATH := $(ROOT)/scripts:$(PATH)
+# MAKEFLAGS=--no-builtin-rules --no-builtin-variables --always-make
+# ROOT := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
+# export PATH := $(ROOT)/scripts:$(PATH)
 
-gen_server:
-	scripts/gen_server.sh
+# gen_server:
+# 	scripts/gen_server.sh
 
-migrate:
-	scripts/migrate.sh
+# migrate:
+# 	scripts/migrate.sh
 
 PHONY: lint
 lint:
@@ -14,4 +14,8 @@ lint:
 
 PHONY: run_local
 run_local:
-	@poetry run uvicorn main:app --reload
+	@poetry run uvicorn app.main:app --reload
+
+PHONY: run_docker
+run_docker:
+	docker compose up --build

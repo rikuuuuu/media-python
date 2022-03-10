@@ -22,6 +22,7 @@ DB_PASSWORD = getenv("DB_PASSWORD")
 DB_ROOT_PASSWORD = getenv("DB_ROOT_PASSWORD")
 DB_HOST = getenv("DB_HOST")
 DB_NAME = getenv("DB_NAME")
+DB_PORT = getenv("DB_PORT")
 
 DATABASE = "mysql://%s:%s@%s/%s?charset=utf8" % (
     DB_USER,

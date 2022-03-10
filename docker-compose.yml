@@ -11,10 +11,10 @@ services:
     tty: true
     environment:
       MYSQL_DATABASE: media_dev
-      # MYSQL_USER: root
-      # DB_HOST: db
-      # MYSQL_PASSWORD: Riku@0369
-      MYSQL_ROOT_PASSWORD: Riku@0369
+      MYSQL_USER: root
+      DB_HOST: 127.0.0.1
+      MYSQL_PASSWORD: MY_riku0369
+      MYSQL_ROOT_PASSWORD: MY_riku0369
     ports:
       - "3316:3306"
     volumes:
@@ -27,8 +27,10 @@ services:
   # FastAPI
   api:
     # db起動後に立ち上げる
-    links:
+    # restart: always
+    depends_on:
       - db
+    tty: true
     container_name: "api"
     # path配下のDockerfile読み込み
     build: .
