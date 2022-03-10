@@ -1,4 +1,4 @@
-import graphene
+# import graphene
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.params import Depends
