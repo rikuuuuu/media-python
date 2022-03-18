@@ -11,10 +11,12 @@ services:
     tty: true
     environment:
       MYSQL_DATABASE: media_dev
-      MYSQL_USER: root
+      # MYSQL_USER: root
       DB_HOST: 127.0.0.1
       MYSQL_PASSWORD: MY_riku0369
       MYSQL_ROOT_PASSWORD: MY_riku0369
+    tmpfs:
+      - /var/lib/mysql
     ports:
       - "3316:3306"
     volumes:
@@ -27,7 +29,7 @@ services:
   # FastAPI
   api:
     # db起動後に立ち上げる
-    # restart: always
+    restart: always
     depends_on:
       - db
     tty: true
